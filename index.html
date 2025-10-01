@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coursework App</title>
+   <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/vue@3.4.27/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+    <div id="app">
+        <header>
+            <div class="header-content">
+                <h1 v-text="sitename"></h1>
+
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" v-model="searchQuery" placeholder="Search lessons...">
+                </div>
+
+                <button @click="toggleCartView" :disabled="cartItemCount === 0" class="cart-button">
+                    <i class="fas fa-shopping-cart"></i> Cart ({{ cartItemCount }})
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <div v-if="!showCart">
+                <div class="controls">
+                    <div class="sort-group">
+                        <label>Sort by:</label>
+                        <select v-model="sortAttribute">
+                            <option value="subject">Subject</option>
+                            <option value="location">Location</option>
+                            <option value="price">Price</option>
+                            <option value="spaces">Availability</option>
+                        </select>
+                    </div>
+                    <div class="sort-group">
+                        <label>
+                            <input type="radio" v-model="sortOrder" value="asc"> Ascending
+                        </label>
+                        <label>
+                            <input type="radio" v-model="sortOrder" value="desc"> Descending
+                        </label>
+                    </div>
+                </div>
+                <lesson-list :lessons="sortedLessons" @add-to-cart="addToCart"></lesson-list>
+            </div>
+
+            <div v-else>
+                <shopping-cart 
+                    :cart="cart" 
+                    @remove-from-cart="removeFromCart" 
+                    @submit-order="submitOrder">
+                </shopping-cart>
+            </div>
+        </main>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
