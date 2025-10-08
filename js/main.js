@@ -1,10 +1,25 @@
+// 1. ADDED THIS DATA ARRAY AT THE TOP
+const lessonsData = [
+    { _id: 101, subject: 'Mathematics', location: 'Hendon', price: 100, spaces: 5, icon: 'fas fa-calculator' },
+    { _id: 102, subject: 'English Language', location: 'Colindale', price: 90, spaces: 5, icon: 'fas fa-book-open' },
+    { _id: 103, subject: 'Chemistry', location: 'Brent Cross', price: 115, spaces: 5, icon: 'fas fa-flask' },
+    { _id: 104, subject: 'History', location: 'Golders Green', price: 85, spaces: 5, icon: 'fas fa-landmark' },
+    { _id: 105, subject: 'Computer Science', location: 'Hendon', price: 125, spaces: 5, icon: 'fas fa-laptop-code' },
+    { _id: 106, subject: 'Physics', location: 'Mill Hill', price: 110, spaces: 5, icon: 'fas fa-atom' },
+    { _id: 107, subject: 'Art & Design', location: 'Colindale', price: 75, spaces: 5, icon: 'fas fa-palette' },
+    { _id: 108, subject: 'Geography', location: 'Wembley', price: 95, spaces: 5, icon: 'fas fa-globe-europe' },
+    { _id: 109, subject: 'Music', location: 'Golders Green', price: 80, spaces: 5, icon: 'fas fa-music' },
+    { _id: 110, subject: 'Biology', location: 'Brent Cross', price: 115, spaces: 5, icon: 'fas fa-dna' }
+];
+
 const { createApp, ref, computed, watch } = Vue;
 
 const app = createApp({
     setup() {
         // STATE (data)
         const sitename = ref('Lesson Shop');
-        const lessons = ref([]);
+        // 2. MODIFIED THIS LINE to use the local lessonsData array
+        const lessons = ref(lessonsData);
         const cart = ref([]);
         const showCart = ref(false);
         const sortAttribute = ref('subject');
@@ -38,8 +53,8 @@ const app = createApp({
             }
         };
 
-        // Initial data fetch
-        fetchLessons();
+        // 3. COMMENTED OUT THIS LINE to prevent overwriting local data
+        // fetchLessons();
 
         // Watch for changes in the search query and trigger a search
         // This implements "search as you type"
