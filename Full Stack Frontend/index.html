@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coursework App</title>
+   <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/vue@3.4.27/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <div class="hero-image">
+    <img src="images/hero-student-image.jpg" alt="Student learning online">
+</div>
+
+    <div id="app">
+      <header>
+            <div class="header-content">
+                <a href="#" @click.prevent="currentPage = 'home'" class="logo">
+                    Online Lessons
+                </a>
+
+                <nav>
+                    <a href="#" @click.prevent="currentPage = 'lessons'">Book a Lesson</a>
+                </nav>
+
+                <div class="header-right">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" v-model="searchQuery" placeholder="Search lessons...">
+                    </div>
+
+                    <button @click="currentPage = 'cart'" :disabled="cartItemCount === 0" class="cart-button">
+                        <i class="fas fa-shopping-cart"></i> Cart ({{ cartItemCount }})
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div v-if="currentPage === 'home'" class="hero">
+                <div class="hero-text">
+                    <h1>Private Lessons Online</h1>
+                    <p>Don't Miss out While You Are Away From School</p>
+                    <button @click="currentPage = 'lessons'" class="btn-primary">
+                        Book a Lesson
+                    </button>
+                </div>
+                <div class="hero-image">
+                    <img src="images/hero-student-image.jpg" alt="Student learning online">
+                </div>
+            </div>
+
+            <div v-if="currentPage === 'lessons'">
+                <div class="controls">
+                    <div class="sort-group">
+                        <label>Sort by:</label>
+                        <select v-model="sortAttribute">
+                            <option value="subject">Subject</option>
+                            <option value="location">Location</option>
+                            <option value="price">Price</option>
+                            <option value="spaces">Availability</option>
+                        </select>
+                    </div>
+                    <div class="sort-group">
+                        <label>
+                            <input type="radio" v-model="sortOrder" value="asc"> Ascending
+                        </label>
+                        <label>
+                            <input type="radio" v-model="sortOrder" value="desc"> Descending
+                        </label>
+                    </div>
+                </div>
+                <lesson-list :lessons="sortedLessons" @add-to-cart="addToCart"></lesson-list>
+            </div>
+
+            <shopping-cart 
+                v-if="currentPage === 'cart'"
+                :cart="cart" 
+                @remove-from-cart="removeFromCart" 
+                @submit-order="submitOrder">
+            </shopping-cart>
+
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
