@@ -19,7 +19,7 @@ const app = createApp({
 
         // !! IMPORTANT: Use 'http://localhost:3000' for local testing
         // Change this to your Render URL before final deployment
-        const serverUrl = ref('http://localhost:3000'); 
+        const serverUrl = ref('https://full-stack-render-2gxd.onrender.com'); 
         
         // === API FETCH FUNCTIONS ===
         const fetchLessons = async () => {
