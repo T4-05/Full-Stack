@@ -203,7 +203,7 @@ app.component('lesson-list', {
                 
                 <div class="lesson-header">
                     <figure>
-                        <img v-bind:src="'https://full-stack-render-2gxd.onrender.com/' + lesson.image" alt="Lesson Image">
+                        <img v-bind:src="'https://full-stack-render-2gxd.onrender.com/Images/' + lesson.image" alt="Lesson Image">
                     </figure>
                     <h2>{{ lesson.subject }}</h2>
                 </div>
