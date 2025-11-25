@@ -9,8 +9,7 @@ const port = process.env.PORT || 3000;
 
 // --- 1. Middleware ---
 
-// Enable CORS (Cross-Origin Resource Sharing)
-// This is essential for your GitHub Pages front-end to talk to your Render/AWS back-end
+
 app.use(cors());
 
 // Middleware to parse JSON request bodies

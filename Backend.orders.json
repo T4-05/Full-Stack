@@ -1,0 +1,55 @@
+[{
+  "_id": {
+    "$oid": "68fa280c4e0f6c3cdaa02b5a"
+  },
+  "name": "Tanweer Ali",
+  "phone": "07878984712",
+  "lessons": [
+    "68f8b5e3c1e160b04f2c5ba6"
+  ]
+},
+{
+  "_id": {
+    "$oid": "691d8d35412821a936c295b7"
+  },
+  "name": "Tanweer Ali",
+  "phone": "07878984712",
+  "lessons": [
+    "68f8b5e3c1e160b04f2c5ba6"
+  ]
+},
+{
+  "_id": {
+    "$oid": "69209471c46fa7152b648026"
+  },
+  "name": "Tanweer Ali",
+  "phone": "07417508824",
+  "lessons": [
+    "68f8b59dc1e160b04f2c5b9e"
+  ]
+},
+{
+  "_id": {
+    "$oid": "6921fb21a2eef1cb3e9f96c5"
+  },
+  "name": "Add your name in the body"
+},
+{
+  "_id": {
+    "$oid": "6921fb81a2eef1cb3e9f96c6"
+  },
+  "name": "Test User",
+  "phone": "12345",
+  "lessonIDs": [],
+  "spaces": 1
+},
+{
+  "_id": {
+    "$oid": "6921ffcca2eef1cb3e9f96c7"
+  },
+  "name": "James ",
+  "phone": "07417508824",
+  "lessons": [
+    "68f8b54ac1e160b04f2c5b94"
+  ]
+}]
