@@ -1,16 +1,16 @@
 /* General Body and Font Styling */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f4f7f6; /* Lighter, neutral background */
+    background-color: #f4f7f6; /* Lighter, neutral background for better readability */
     color: #333;
     margin: 0;
     padding: 0; /* Remove default padding */
 }
 
 #app {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px; /* Add padding here instead of body */
+    max-width: 1200px; /* Constrains the app width on large screens */
+    margin: 0 auto;    /* Centers the app */
+    padding: 20px;     /* Add padding here instead of body */
 }
 
 /* === NEW HEADER STYLING === */
@@ -18,12 +18,12 @@ header {
     background-color: #ffffff;
     padding: 15px 30px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
     margin-bottom: 30px;
 }
 
 .header-content {
-    display: flex;
+    display: flex; /* Flexbox makes aligning logo, nav, and cart easy */
     justify-content: space-between;
     align-items: center;
 }
@@ -38,7 +38,6 @@ header {
 header nav {
     display: flex;
     gap: 25px;
-    /* This will hide it on small screens, you can add media queries later */
     flex-grow: 1; 
     padding-left: 40px;
 }
@@ -52,7 +51,7 @@ header nav a {
 }
 
 header nav a:hover {
-    color: #14b8a6; /* Theme teal */
+    color: #14b8a6; /* Theme teal color on hover */
 }
 
 .header-right {
@@ -67,14 +66,14 @@ header nav a:hover {
     font-weight: 500;
 }
 
-/* Search Bar */
+/* Search Bar Styling */
 .search-bar {
     display: flex;
     align-items: center;
     background-color: #f0f0f0;
     padding: 8px 12px;
-    border-radius: 20px;
-    width: 250px; /* Adjusted width */
+    border-radius: 20px; /* Pill shape */
+    width: 250px;
 }
 
 .search-bar i {
@@ -85,18 +84,18 @@ header nav a:hover {
 .search-bar input {
     border: none;
     background: transparent;
-    outline: none;
+    outline: none; /* Removes default browser outline */
     width: 100%;
-    font-size: 0.9rem; /* Slightly smaller */
+    font-size: 0.9rem;
 }
 
-/* Cart Button */
+/* Cart Button Styling */
 .cart-button {
     background-color: #14b8a6; /* Theme teal/green */
     color: white;
     border: none;
     padding: 10px 20px;
-    border-radius: 20px; /* Pill shape */
+    border-radius: 20px; 
     cursor: pointer;
     font-size: 0.9rem;
     font-weight: bold;
@@ -151,7 +150,7 @@ header nav a:hover {
 }
 
 .hero-text .btn-primary {
-    background-color: #002266; /* Dark blue from image */
+    background-color: #002266; /* Dark blue accent */
     color: white;
     padding: 15px 30px;
     border: none;
@@ -186,9 +185,10 @@ header nav a:hover {
     gap: 10px;
 }
 
-/* Lesson Grid Styling */
+/* Lesson Grid Styling (CSS Grid) */
 .lesson-grid {
     display: grid;
+    /* Automatically fits as many cards as possible, minimum 280px wide */
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
 }
@@ -205,21 +205,36 @@ header nav a:hover {
 }
 
 .lesson-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-5px); /* Little lift effect on hover */
 }
 
 .lesson-header {
     display: flex;
+    flex-direction: column; /* Stacks image on top of text */
     align-items: center;
+    text-align: center;
     margin-bottom: 15px;
 }
 
-.lesson-header i {
-    font-size: 2.5em;
-    color: #14b8a6; /* Theme teal */
-    margin-right: 15px;
-    width: 50px;
-    text-align: center;
+.lesson-header h2 {
+    margin: 10px 0 0 0;
+    font-size: 1.5rem;
+    color: #2c3e50;
+}
+
+/* Image Container Styling */
+.lesson-header figure {
+    width: 100%;
+    height: 150px;
+    margin: 0;
+    overflow: hidden; /* Crops image if it's too tall */
+    border-radius: 8px 8px 0 0;
+}
+
+.lesson-header img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures image covers the box without distortion */
 }
 
 .lesson-details p {
@@ -227,7 +242,7 @@ header nav a:hover {
 }
 
 .lesson-card .add-to-cart-btn {
-    margin-top: auto; /* Pushes button to the bottom */
+    margin-top: auto; /* Pushes button to the bottom of the card */
     width: 100%;
     padding: 12px;
     background-color: #007bff;
@@ -255,8 +270,8 @@ header nav a:hover {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    max-width: 800px; /* Constrain width */
-    margin: 0 auto; /* Center the cart */
+    max-width: 800px;
+    margin: 0 auto; /* Centers the cart on the page */
 }
 
 .cart-item {
@@ -272,7 +287,7 @@ header nav a:hover {
 }
 
 .remove-btn {
-    background-color: #dc3545;
+    background-color: #dc3545; /* Red for destructive action */
     color: white;
     border: none;
     padding: 8px 12px;
@@ -301,14 +316,14 @@ header nav a:hover {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
-    box-sizing: border-box; /* Important for 100% width */
+    box-sizing: border-box; 
 }
 
 .checkout-btn {
     width: 100%;
     padding: 15px;
     font-size: 1.1rem;
-    background-color: #28a745;
+    background-color: #28a745; /* Green for success/go */
     color: white;
     border: none;
     border-radius: 5px;
@@ -318,35 +333,4 @@ header nav a:hover {
 .checkout-btn:disabled {
     background-color: #83d494;
     cursor: not-allowed;
-}
-
-/* Update this section in your style.css */
-
-.lesson-header {
-    display: flex;
-    flex-direction: column; /* This forces the image to be on top */
-    align-items: center;    /* This centers the content */
-    text-align: center;     /* This ensures the text is centered */
-    margin-bottom: 15px;
-}
-
-.lesson-header h2 {
-    margin: 10px 0 0 0;     /* Adds a little space between image and text */
-    font-size: 1.5rem;      /* Makes the title look nice */
-    color: #2c3e50;
-}
-
-/* Ensure your figure/image styles are still there */
-.lesson-header figure {
-    width: 100%;
-    height: 150px;
-    margin: 0;
-    overflow: hidden;
-    border-radius: 8px 8px 0 0;
-}
-
-.lesson-header img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
 }
