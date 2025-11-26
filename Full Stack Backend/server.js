@@ -1,5 +1,5 @@
 const express = require('express');
-const { MongoClient, ObjectId } = require('mongodb'); // Import ObjectId
+const { MongoClient, ObjectId } = require('mongodb'); 
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
@@ -7,43 +7,45 @@ const fs = require('fs');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// --- 1. Middleware ---
+// ============================================================
+// MIDDLEWARE SETUP
+// ============================================================
 
-
+// Enable CORS so the front-end (GitHub Pages) can talk to this back-end
 app.use(cors());
 
-// Middleware to parse JSON request bodies
+// Automatically parse incoming JSON data in requests
 app.use(express.json());
 
 // [Middleware A] Logger Middleware
-// This logs every request to the console
+// This is a custom middleware I added to track traffic. 
+// It logs the Method (GET/POST) and URL for every request hitting the server.
 app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] Received ${req.method} request for ${req.url}`);
-    next(); // Pass control to the next middleware/route handler
+    next(); // Crucial: passes control to the next function so the request doesn't hang
 });
 
 // [Middleware B] Static File Middleware for Images
-// This middleware will check if the request is for an image in the 'images' folder
+// This handles serving the lesson images directly from the backend folder
 const imagesDirPath = path.join(__dirname, 'images');
-// [Middleware B] Static File Middleware for Images
+
 app.use('/images', (req, res, next) => {
-    // Use 'path.basename' to strip any leading slashes or tricky paths
-    // e.g. "/maths.jpg" becomes just "maths.jpg"
+    // Clean the filename to prevent directory traversal issues
     const filename = path.basename(req.url);
     
-    // Create the absolute path to the image file
+    // Construct the full server path to the image
     const filePath = path.join(__dirname, 'images', filename);
 
-    // Debugging: Log the path to the terminal so we can see what's wrong
+    // Console log for debugging image paths
     console.log(`Looking for file at: ${filePath}`);
 
-    // Check if the file exists
+    // Check if the file actually exists before trying to send it
     fs.access(filePath, fs.constants.F_OK, (err) => {
         if (!err) {
-            // File exists, send it
+            // Found it! Send the image file to the browser
             res.sendFile(filePath);
         } else {
-            // File does not exist, send a 404 error
+            // Not found: Send a 404 error properly
             console.log("File not found!");
             res.status(404).json({ message: 'Error: Image not found' });
         }
@@ -51,29 +53,32 @@ app.use('/images', (req, res, next) => {
 });
 
 
-// --- 2. MongoDB Connection ---
+// ============================================================
+// MONGODB CONNECTION
+// ============================================================
 
-// !! IMPORTANT: Replace this with your actual MongoDB Atlas Connection String
 const mongoUri ="mongodb+srv://teefourghost_db_user:VY4FrbPFk4t1Ay17@fullstack.yd6yne6.mongodb.net/?retryWrites=true&w=majority&appName=FullStack";
 const client = new MongoClient(mongoUri);
-let db; // Variable to hold the database connection
+let db; // This global variable will hold our active database connection
 
 async function connectToDB() {
     try {
         await client.connect();
-        db = client.db('Backend'); // Or whatever you named your database
+        db = client.db('Backend'); // Connects to the specific database named 'Backend'
         console.log('Successfully connected to MongoDB Atlas');
     } catch (err) {
         console.error('Failed to connect to MongoDB Atlas', err);
-        process.exit(1); // Exit the process if connection fails
+        process.exit(1); // Stop the server if we can't connect to the database
     }
 }
 
 
-// --- 3. REST API Routes ---
+// ============================================================
+// REST API ROUTES
+// ============================================================
 
 // [Route A] GET /lessons
-// Returns all documents from the 'lessons' collection
+// This retrieves the full list of lessons to display on the frontend
 app.get('/lessons', async (req, res) => {
     try {
         const lessons = await db.collection('lessons').find({}).toArray();
@@ -84,7 +89,7 @@ app.get('/lessons', async (req, res) => {
 });
 
 // [Route B] POST /orders
-// Saves a new order to the 'orders' collection
+// This receives the cart data and saves a new order document to MongoDB
 app.post('/orders', async (req, res) => {
     try {
         const newOrder = req.body;
@@ -96,15 +101,15 @@ app.post('/orders', async (req, res) => {
 });
 
 // [Route C] PUT /lessons/:id
-// Updates a lesson in the 'lessons' collection (e.g., updating spaces)
+// This updates a specific lesson. I use this to decrease the 'spaces' count after a purchase.
 app.put('/lessons/:id', async (req, res) => {
     try {
         const lessonId = req.params.id;
         const updateData = req.body; // e.g., { "spaces": 2 }
 
         const result = await db.collection('lessons').updateOne(
-            { _id: new ObjectId(lessonId) }, // Filter by _id
-            { $set: updateData }           // Use $set to update specific fields
+            { _id: new ObjectId(lessonId) }, // Find the lesson by its MongoDB ID
+            { $set: updateData }           // Update only the fields sent in the body
         );
 
         if (result.matchedCount === 0) {
@@ -113,7 +118,7 @@ app.put('/lessons/:id', async (req, res) => {
         
         res.json({ message: 'Lesson updated successfully' });
     } catch (err) {
-        // Handle potential invalid ObjectId format
+        // Basic error handling for invalid IDs
         if (err.name === 'BSONError') {
             return res.status(400).json({ message: 'Invalid Lesson ID format' });
         }
@@ -122,7 +127,8 @@ app.put('/lessons/:id', async (req, res) => {
 });
 
 // [Search Functionality] GET /search
-// Implements the back-end search
+// This implements the "Search as you type" feature on the backend.
+// It uses MongoDB Regex to find partial matches in Subject or Location.
 app.get('/search', async (req, res) => {
     try {
         const query = req.query.q;
@@ -130,16 +136,14 @@ app.get('/search', async (req, res) => {
             return res.status(400).json({ message: 'Search query (q) is required' });
         }
 
-        // Create a regex for case-insensitive search
+        // 'i' flag makes it case-insensitive (e.g., 'math' finds 'Mathematics')
         const regex = new RegExp(query, 'i');
 
-        // Search across multiple fields using $or
+        // Search across multiple fields using the $or operator
         const searchResults = await db.collection('lessons').find({
             $or: [
                 { subject: { $regex: regex } },
                 { location: { $regex: regex } }
-                // Note: Searching on numeric fields like price/spaces with a text regex is tricky
-                // and often not desired. We'll stick to text fields.
             ]
         }).toArray();
 
@@ -151,9 +155,11 @@ app.get('/search', async (req, res) => {
 });
 
 
-// --- 4. Start Server ---
+// ============================================================
+// SERVER STARTUP
+// ============================================================
 
-// Connect to the database and then start the server
+// We wait for the DB connection before opening the server to traffic
 connectToDB().then(() => {
     app.listen(port, () => {
         console.log(`Server running on http://localhost:${port}`);
